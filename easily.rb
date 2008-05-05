@@ -15,6 +15,9 @@ rescue LoadError
   end
 end
 
+require File.join('easily', 'xmleasy')
+require File.join('easily', 'format', 'xml')
+
 # require 'easily'
 # a = Easily.new
 # a.get('http://www.360voice.com/api/blog-getentries.asp?tag=fajitaman')
