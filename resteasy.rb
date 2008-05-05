@@ -15,14 +15,14 @@ rescue LoadError
   end
 end
 
-require File.join('easily', 'xmleasy')
-require File.join('easily', 'format', 'xml')
+require File.join('resteasy', 'xmleasy')
+require File.join('resteasy', 'format', 'xml')
 
-# require 'easily'
-# a = Easily.new
+# require 'resteasy'
+# a = RestEasy.new
 # a.get('http://www.360voice.com/api/blog-getentries.asp?tag=fajitaman')
 
-class Easily
+class RestEasy
   attr_accessor :headers, :username, :password
   
   ['copy', 'delete', 'get', 'head', 'lock', 'mkcol', 'move', 'options', 'post', 'propfind', 'proppatch', 'put', 'trace', 'unlock'].each do |verb|

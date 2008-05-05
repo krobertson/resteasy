@@ -1,4 +1,4 @@
-class Easily
+class RestEasy
   module Format
     class Xml < Hash
       attr_accessor :elements, :rootname

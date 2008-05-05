@@ -16,12 +16,12 @@ class XmlEasy < XmlSimple
   def xml_in_easy(string)
     options = { 'keeproot' => true, 'forcearray' => false}
     hash = xml_in_string(string, options)
-    easy = Easily::Format::Xml.new(elements, hash.keys.first)
+    easy = RestEasy::Format::Xml.new(elements, hash.keys.first)
     easy = easy.merge(hash[easy.rootname])
   end
   
   def xml_out_easy(hash)
-    if hash.is_a?(Easily::Format::Xml)
+    if hash.is_a?(RestEasy::Format::Xml)
       @elements = hash.elements
       hash = { hash.rootname => {}.merge(hash) }
     end
@@ -32,9 +32,6 @@ class XmlEasy < XmlSimple
     @elements << key unless value.is_a?(Hash) or value.is_a?(Array)
     super
   end
-
-
-
 
   def value_to_xml(ref, name, indent)
     named = !name.nil? && name != ''
@@ -141,8 +138,5 @@ class XmlEasy < XmlSimple
     @ancestors.pop if !scalar(ref)
     result.join('')
   end
-
-
-
 
 end
