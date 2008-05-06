@@ -16,6 +16,7 @@ rescue LoadError
 end
 
 require File.join('resteasy', 'xmleasy')
+require File.join('resteasy', 'format', 'json')
 require File.join('resteasy', 'format', 'xml')
 
 # require 'resteasy'
@@ -40,7 +41,17 @@ class RestEasy
     request = Net::HTTP.const_get(verb).new(uri.request_uri)
     request.initialize_http_header(@headers)
     request.basic_auth(@username, @password) if username
-    request.body = body unless body.nil?
+
+    # Process the body based on format
+    unless body.nil?
+      if body.is_a?(RestEasy::Format::Xml)
+        request.body = XmlEasy.xml_out_easy(body)
+      elsif body.is_a?(RestEasy::Format::Json)
+        request.body = body.to_json
+      else
+        request.body = body
+      end
+    end
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == 'https'
@@ -52,9 +63,11 @@ class RestEasy
       # Handle the response
       case result.content_type
       when 'text/xml'
-        return XmlSimple.xml_in_string(result.body, 'keeproot' => false)
+        return XmlEasy.xml_in_easy(result.body)
       when 'text/json'
-        return JSON.parse(result.body)
+        hash = JSON.parse(result.body)
+        json = RestEasy::Format::Json.new
+        return json.merge(hash)
       else
         return result.body
       end

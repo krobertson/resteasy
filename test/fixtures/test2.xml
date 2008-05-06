@@ -1,0 +1,5 @@
+<Messages>
+  <Message Id="1" Yes="no">test</Message>
+  <Message Id="2" Yes="yes" />
+  <Message Id="3">blah</Message>
+</Messages>

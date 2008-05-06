@@ -24,7 +24,6 @@ class XmlEasy < XmlSimple
     if hash.is_a?(RestEasy::Format::Xml)
       @elements = hash.elements
       hash = { hash.rootname => {}.merge(hash) }
-      puts @elements.inspect
     end
     xml_out(hash, { 'keeproot' => true })
   end
