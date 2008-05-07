@@ -1,11 +1,29 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
-require 'rake/gempackagetask'
 
-$LOAD_PATH << File.join(File.dirname(__FILE__), 'resteasy')
-require 'resteasy'
+require 'rubygems'
+require 'hoe'
+require './lib/resteasy.rb'
 
+# RubyGem tasks
+Hoe.new('resteasy', RestEasy::VERSION) do |p|
+  p.author = 'Ken Robertson'
+  p.email = 'ken@invalidlogic.com'
+  p.summary = 'Simple generic client library for REST webservices'
+  p.description = p.paragraphs_of('Readme.txt', 2..2).join("\n\n")
+  p.url = p.paragraphs_of('Readme.txt', 0).first.split(/\n/)[2..-1].map { |u| u.strip }
+  p.changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
+  p.extra_deps << ['active_support']
+end
+
+# Console 
+desc "Open an irb session preloaded with this library"
+task :console do
+  sh "irb -rubygems -r ./lib/resteasy.rb"
+end
+
+# Test tasks
 desc 'Test the RestEasy library.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'resteasy'

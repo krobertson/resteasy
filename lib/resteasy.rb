@@ -1,3 +1,5 @@
+$:.unshift File.dirname(__FILE__) # For use/testing when no gem is installed
+
 require 'net/http'
 require 'net/https'
 require 'uri'
@@ -24,6 +26,7 @@ require File.join('resteasy', 'format', 'xml')
 # a.get('http://www.360voice.com/api/blog-getentries.asp?tag=fajitaman')
 
 class RestEasy
+  VERSION = '0.1.0'
   attr_accessor :headers, :username, :password
   
   ['copy', 'delete', 'get', 'head', 'lock', 'mkcol', 'move', 'options', 'post', 'propfind', 'proppatch', 'put', 'trace', 'unlock'].each do |verb|
