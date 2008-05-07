@@ -1,10 +1,6 @@
-require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
-
 require 'rubygems'
 require 'hoe'
-require './lib/resteasy.rb'
+require './lib/resteasy'
 
 # RubyGem tasks
 Hoe.new('resteasy', RestEasy::VERSION) do |p|
@@ -21,14 +17,6 @@ end
 desc "Open an irb session preloaded with this library"
 task :console do
   sh "irb -rubygems -r ./lib/resteasy.rb"
-end
-
-# Test tasks
-desc 'Test the RestEasy library.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'resteasy'
-  t.pattern = 'test/**/test_*.rb'
-  t.verbose = true
 end
 
 # Code coverage

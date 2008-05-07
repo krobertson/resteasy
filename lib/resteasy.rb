@@ -4,30 +4,36 @@ require 'net/http'
 require 'net/https'
 require 'uri'
 require 'cgi'
+require 'rubygems'
 
 begin
   require 'xml_simple'
 rescue LoadError
-  require 'rubygems'
   require 'active_support'
   begin
-  require 'xml_simple'
+    require 'xml_simple'
   rescue LoadError
     require 'xmlsimple'
   end
+end
+
+begin
+  require 'json/pure'
+rescue LoadError
+  require 'json'
 end
 
 require File.join('resteasy', 'xmleasy')
 require File.join('resteasy', 'format', 'json')
 require File.join('resteasy', 'format', 'xml')
 
-# require 'resteasy'
-# a = RestEasy.new
-# a.get('http://www.360voice.com/api/blog-getentries.asp?tag=fajitaman')
-
 class RestEasy
   VERSION = '0.1.0'
   attr_accessor :headers, :username, :password
+
+  def initialize(headers = {})
+    @headers = headers
+  end
   
   ['copy', 'delete', 'get', 'head', 'lock', 'mkcol', 'move', 'options', 'post', 'propfind', 'proppatch', 'put', 'trace', 'unlock'].each do |verb|
     self.class_eval <<-EOS, __FILE__, __LINE__
@@ -38,9 +44,10 @@ class RestEasy
   end
   
   private
-  def perform(verb, url, body = nil, limit = 2) #:nodoc
+  def perform(verb, url, body = nil, limit = 3) #:nodoc
     uri = URI.parse(url)
 
+    # Get the request type that pertains to the verb and set it up
     request = Net::HTTP.const_get(verb).new(uri.request_uri)
     request.initialize_http_header(@headers)
     request.basic_auth(@username, @password) if username
@@ -56,33 +63,35 @@ class RestEasy
       end
     end
 
+    # Issue the request
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == 'https'
     result = http.start { |h| h.request(request) }
     
+    # Handle the response
     case result
     when Net::HTTPSuccess
 
-      # Handle the response
+      # Successful response, attempt to parse
       case result.content_type
       when 'text/xml'
         return XmlEasy.xml_in_easy(result.body)
       when 'text/json'
-        hash = JSON.parse(result.body)
-        json = RestEasy::Format::Json.new
-        return json.merge(hash)
+        return RestEasy::Format::Json.new.merge(JSON.parse(result.body))
       else
         return result.body
       end
 
     when Net::HTTPRedirection
       # Process a redirection
-      return perform(verb, response['location'], body, limit - 1) if limit > 1
-      # TODO raise error if too many?
+      return perform(verb, result['location'], body, limit - 1) if limit > 1
+      raise RedirectLoopException
     else
-      # Print an exception
-      puts "ERROR #{result.coce}: #{result.message}\n\t#{result.body}"
-      result.error!
+      # Return the response object so they can handle the error
+      return result
     end
+  end
+
+  class RedirectLoopException < Exception
   end
 end
