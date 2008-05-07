@@ -2,5 +2,10 @@ History.txt
 Manifest.txt
 README.txt
 Rakefile
-lib/*
-test/*
+lib/restasy.rb
+lib/resteasy/format/json.rb
+lib/resteasy/format/xml.rb
+lib/resteasy/xmleasy.rb
+test/fixtures/test1.xml
+test/fixtures/test2.xml
+test/test_xmleasy.rb
