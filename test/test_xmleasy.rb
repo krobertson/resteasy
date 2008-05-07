@@ -1,8 +1,4 @@
-require 'rubygems'
-require 'test/unit'
-require 'shoulda'
-
-require File.join(File.dirname(__FILE__), '..', 'resteasy')
+require File.dirname(__FILE__) + '/helper'
 
 class XmlEasyTest < Test::Unit::TestCase
   context 'XmlEasy' do

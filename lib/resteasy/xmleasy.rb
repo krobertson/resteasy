@@ -11,6 +11,7 @@ class XmlEasy < XmlSimple
   
   def initialize
     @elements = []
+    super
   end
   
   def xml_in_easy(string)
