@@ -30,3 +30,10 @@ Rake::TestTask.new(:test) do |t|
   t.pattern = 'test/**/test_*.rb'
   t.verbose = true
 end
+
+# Code coverage
+task :coverage do
+  system("rm -fr coverage")
+  system("rcov test/test_*.rb")
+  system("open coverage/index.html")
+end
