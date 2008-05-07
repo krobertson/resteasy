@@ -35,7 +35,7 @@ require File.join('resteasy', 'format', 'xml')
 # For details on the usage, see the README.txt
 
 class RestEasy
-  VERSION = '0.1.0'
+  VERSION = '0.5.0'
   attr_accessor :headers, :username, :password
 
   # Create a new instance of the RestEasy library
