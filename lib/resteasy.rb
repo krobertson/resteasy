@@ -34,6 +34,16 @@ class RestEasy
   def initialize(headers = {})
     @headers = headers
   end
+
+  def set_auth(username, password='')
+    @username = username
+    @password = password
+  end
+  
+  def clear_auth
+    @username = nil
+    @password = nil
+  end
   
   ['copy', 'delete', 'get', 'head', 'lock', 'mkcol', 'move', 'options', 'post', 'propfind', 'proppatch', 'put', 'trace', 'unlock'].each do |verb|
     self.class_eval <<-EOS, __FILE__, __LINE__

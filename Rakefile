@@ -10,7 +10,7 @@ Hoe.new('resteasy', RestEasy::VERSION) do |p|
   p.description = p.paragraphs_of('Readme.txt', 2..2).join("\n\n")
   p.url = p.paragraphs_of('Readme.txt', 0).first.split(/\n/)[2..-1].map { |u| u.strip }
   p.changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
-  p.extra_deps << ['active_support']
+  p.extra_deps << ['activesupport']
 end
 
 # Console 

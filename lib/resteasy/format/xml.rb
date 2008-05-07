@@ -5,7 +5,11 @@ class RestEasy
       def initialize(elements=[], rootname=nil)
         @elements = elements
         @rootname = rootname
-      end      
+      end
+      
+      def to_xml
+        XmlEasy.xml_out_easy(self)
+      end
     end
   end
 end
