@@ -1,11 +1,14 @@
-RestEasy
-	by Ken Robertson (ken@invalidlogic.com)
-	http://invalidlogic.com/resteasy/
+= RestEasy
+  by Ken Robertson (ken@invalidlogic.com)
+  http://invalidlogic.com/resteasy/
 
 == DESCRIPTION:
 
 RestEasy is a Ruby library for working with just about any REST webservice.
 It returns any data as a Hash, as opposed to trying to construct a full class.
+Rather than having to find a specific library for every service, such as Flickr,
+Yahoo, Twitter, or whomever, RestEasy aims to be a library that can be used with
+any REST API it comes across.
 
 It also includes some specialized handling to preserve the original XML format
 and mixtures of attributes and element strings.

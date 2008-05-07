@@ -27,19 +27,39 @@ require File.join('resteasy', 'xmleasy')
 require File.join('resteasy', 'format', 'json')
 require File.join('resteasy', 'format', 'xml')
 
+# == RestEasy
+#
+# Client library for easily interacting with any REST web service you
+# can think of.
+#
+# For details on the usage, see the README.txt
+
 class RestEasy
   VERSION = '0.1.0'
   attr_accessor :headers, :username, :password
 
+  # Create a new instance of the RestEasy library
+  #   +headers+ is a hash of header values that will be used on each request
+  #
+  # Examples:
+  #   s = RestEasy.new
+  #   s = RestEasy.new 'Auth-Token' => 'abcd1234'
+  #
+  # Returns RestEasy
   def initialize(headers = {})
     @headers = headers
   end
 
+  # Sets the username/password to be used for basic authentication
+  #   +username+ the username to use with the service
+  #   +password+ the password to use with the service
+  #     Password is optional and will be a blank string if not given
   def set_auth(username, password='')
     @username = username
     @password = password
   end
   
+  # Clears any previously set authentication values
   def clear_auth
     @username = nil
     @password = nil
@@ -47,6 +67,7 @@ class RestEasy
   
   ['copy', 'delete', 'get', 'head', 'lock', 'mkcol', 'move', 'options', 'post', 'propfind', 'proppatch', 'put', 'trace', 'unlock'].each do |verb|
     self.class_eval <<-EOS, __FILE__, __LINE__
+      public
       def #{verb}(url, body = nil)
         perform(:#{verb.capitalize}, url, body)
       end
