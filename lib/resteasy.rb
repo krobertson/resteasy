@@ -37,6 +37,18 @@ require File.join('resteasy', 'format', 'xml')
 class RestEasy
   VERSION = '0.5.0'
   attr_accessor :headers, :username, :password
+  @@maximum_redirects = 3
+  
+  # Return the currently configured maximum number of redirects
+  def self.maximum_redirects
+    @@maximum_redirects
+  end
+
+  # Set the maximum number of redirects
+  #   +val+ is a number of redirects to allow
+  def self.maximum_redirects=(val)
+    @@maximum_redirects = val
+  end
 
   # Create a new instance of the RestEasy library
   #   +headers+ is a hash of header values that will be used on each request
@@ -69,7 +81,7 @@ class RestEasy
     self.class_eval <<-EOS, __FILE__, __LINE__
       public
       def #{verb}(url, body = nil)
-        perform(:#{verb.capitalize}, url, body)
+        perform(:#{verb.capitalize}, url, body, @@maximum_redirects)
       end
     EOS
   end

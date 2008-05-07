@@ -105,7 +105,7 @@ class RestEasyTest < Test::Unit::TestCase
       response = Net::HTTPMovedPermanently.new('get', 301, 'moved')
       response['location'] = 'http://localhost/some/other/url'
 
-      Net::HTTP.any_instance.expects(:start).times(3).returns(response)
+      Net::HTTP.any_instance.expects(:start).times(RestEasy.maximum_redirects).returns(response)
       
       assert_raise RestEasy::RedirectLoopException do
         hash = @service.get('http://localhost/some/url')
@@ -121,6 +121,28 @@ class RestEasyTest < Test::Unit::TestCase
       assert result.is_a?(Net::HTTPNotFound)
       assert_equal response, result
     end
+  end
 
+  context 'Instance helper methods' do
+    setup { @service = RestEasy.new }
+    
+    should 'set/return number of maximum redirects' do
+      assert_equal 3, RestEasy.maximum_redirects
+
+      RestEasy.maximum_redirects = 4
+      assert_equal 4, RestEasy.maximum_redirects
+    end
+    
+    should 'set authentication' do
+      @service.set_auth('abcd', '1234')
+      assert_equal 'abcd', @service.username
+      assert_equal '1234', @service.password
+    end
+    
+    should 'clear authentication' do
+      @service.clear_auth
+      assert_equal nil, @service.username
+      assert_equal nil, @service.password
+    end
   end
 end
